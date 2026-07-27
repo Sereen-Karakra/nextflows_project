@@ -11,7 +11,7 @@ export function registerGreetTool(server: McpServer): void {
     "greet",
     {
       description:
-        "Return a short greeting for a person. Use this to verify the MCP server is running.",
+        "Return a short greeting for a person. Use this to verify the MCP server is running nagham halloum.",
       inputSchema: greetInputSchema,
     },
     async ({ name }) => {
