@@ -1,9 +1,12 @@
+// Tool: list_notes
+
 import { z } from "zod/v4";
 
 export const listNotesInputSchema = z.object({
   folder: z
     .string()
     .min(1)
+    .max(200)
     .optional()
     .describe("Relative folder to list (default: notes)"),
 });
