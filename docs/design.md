@@ -11,7 +11,7 @@
 
 ## 1. Pitch
 
-Notes & FAQ Search is an MCP server designed to help students quickly search through notes and frequently asked questions. Instead of manually browsing documents, users can ask questions in natural language and receive relevant answers. The MCP exposes simple tools for searching notes, listing available notes, and adding new notes, making information easier to access during conversations.
+Notes & FAQ Search is an MCP server designed to help students quickly search through notes and frequently asked questions. Instead of manually browsing documents, users can ask questions in natural language and quickly retrieve the most relevant notes and FAQs. The MCP exposes simple tools for searching notes, listing available notes, and adding new notes, making information easier to access during conversations.
 
 ---
 
@@ -52,9 +52,9 @@ The following features are not included in this project:
 
 You succeed on Demo Day if:
 
-- [ ] The model successfully searches notes and returns relevant results.
-- [ ] The model lists the available notes correctly.
-- [ ] The model adds a new note successfully using the MCP tool.
+- [x] The model successfully searches notes and returns relevant results.
+- [x] The model lists the available notes correctly.
+- [x] The model adds a new note successfully using the MCP tool.
 
 ---
 
@@ -66,19 +66,30 @@ You succeed on Demo Day if:
 | MCP tool integration issues | Medium | Test each tool individually using MCP Inspector before the demo. |
 | Incorrect search results | Low | Test the search tool with multiple sample notes and improve keyword matching. |
 
+
 ---
 
 ## 7. Evidence for Week 2
 
 - [x] `docs/project-choice.md` filled
-- [ ] ≥3 Zod schemas under `src/schemas/`
-- [ ] Tools registered (stubs OK)
-- [ ] `examples/<tool>.json` for each registered tool
-- [ ] Inspector screenshots attached to the GitHub Issue
+- [x] ≥3 Zod schemas under `src/schemas/`
+- [x] Tools registered (stubs OK)
+- [x] `examples/<tool>.json` for each registered tool
+- [x] Inspector screenshots attached to the GitHub Issue
+
+---
+
+## 8. Notes from reading Everything MCP Server
+
+- Tool names are short, descriptive, and consistently use snake_case.
+- Tool descriptions clearly explain what the tool does in one concise sentence.
+- Each tool has a single responsibility and focuses on one specific task.
+- Error messages are simple, clear, and explain exactly what input is missing or invalid.
+- The documentation follows a consistent structure, making the available tools easy to understand.
 
 ---
 
 ## Mentor decision
 
 - Status: pending
-- Comments:
+- Comments: 
