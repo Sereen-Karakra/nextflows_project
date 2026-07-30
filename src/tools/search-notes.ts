@@ -19,13 +19,13 @@ export function registerSearchNotesTool(server: McpServer): void {
       inputSchema: searchNotesInputSchema,
     },
     async ({ query, limit }) => {
-      // Week 2: stub is intentional. Week 3: replace with a real file search.
       return {
         content: [
           {
             type: "text",
             text: JSON.stringify(
               {
+                ok: true,
                 stub: true,
                 tool: "search_notes",
                 query,

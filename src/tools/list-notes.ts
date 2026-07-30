@@ -18,10 +18,12 @@ export function registerListNotesTool(server: McpServer): void {
             type: "text",
             text: JSON.stringify(
               {
+                ok: true,
                 stub: true,
                 tool: "list_notes",
                 folder: folder ?? "notes",
-                message: "Replace this stub in Week 3 with a real directory listing.",
+                message:
+                  "Replace this stub in Week 3 with a real directory listing.",
               },
               null,
               2,

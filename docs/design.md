@@ -5,7 +5,7 @@
 **Students:** Nagham Halloum, Sereen Karakra  
 **Repo:** https://github.com/Sereen-Karakra/nextflows_project  
 **Branch:** `week-2-design`  
-**GitHub Issue:**  
+**GitHub Issue:** https://github.com/Sereen-Karakra/nextflows_project/issues/1
 
 ---
 
