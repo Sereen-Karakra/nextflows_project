@@ -18,6 +18,7 @@ export function registerAddNoteTool(server: McpServer): void {
             type: "text",
             text: JSON.stringify(
               {
+                ok: true,
                 stub: true,
                 tool: "add_note",
                 title,
