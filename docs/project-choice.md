@@ -12,12 +12,17 @@ I am building a Notes & FAQ Search MCP for classmates so that they can ask an AI
 
 ## Starter selected
 
-- [ ] Notes & FAQ Search
+- [x] Notes & FAQ Search
 - [ ] Personal Expense Tracker
 - [ ] To-Do List
 - [ ] Weather Briefing
 - [ ] Quote of the Day
 - [ ] Other (mentor-approved): _______________
+
+## Team members
+
+- Nagham Halloum
+- Sereen Karakra
 
 ## Scoring (1–5)
 
