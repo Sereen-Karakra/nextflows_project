@@ -1,35 +1,72 @@
 import type { McpServer } from "@modelcontextprotocol/server";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 import { addNoteInputSchema } from "../schemas/add-note.js";
+import { notesSchema } from "../schemas/note.js";
+import { readDataFile } from "../lib/file.js";
 
-/** EXAMPLE Week 2 stub — append a new note (P0 candidate). */
 export function registerAddNoteTool(server: McpServer): void {
   server.registerTool(
     "add_note",
     {
       description:
-        "Create a new local note file with a title and body for later search.",
+        "Add a new note to the local notes collection.",
       inputSchema: addNoteInputSchema,
     },
-    async ({ title, body }) => {
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(
-              {
-                stub: true,
-                tool: "add_note",
-                title,
-                bodyPreview: body.slice(0, 80),
-                message: "Replace this stub in Week 3 with a real file write.",
-              },
-              null,
-              2,
-            ),
-          },
-        ],
-      };
+    async ({ title, category, content }) => {
+      try {
+        const json = await readDataFile("notes.json");
+        const notes = notesSchema.parse(JSON.parse(json));
+
+        const newNote = {
+          id:
+            notes.length > 0
+              ? Math.max(...notes.map((note) => note.id)) + 1
+              : 1,
+          title,
+          category,
+          content,
+        };
+
+        notes.push(newNote);
+
+        const filePath = path.resolve(process.cwd(), "data", "notes.json");
+
+        await fs.writeFile(
+          filePath,
+          JSON.stringify(notes, null, 2),
+          "utf-8",
+        );
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  success: true,
+                  message: "Note added successfully.",
+                  note: newNote,
+                },
+                null,
+                2,
+              ),
+            },
+          ],
+        };
+      } catch (error) {
+        console.error("add_note:", error);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Failed to add note.",
+            },
+          ],
+        };
+      }
     },
   );
 }
