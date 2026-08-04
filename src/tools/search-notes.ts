@@ -1,9 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 
 import { searchNotesInputSchema } from "../schemas/search-notes.js";
-import { notesSchema } from "../schemas/note.js";
-import { readDataFile } from "../lib/file.js";
-
+import { searchNotes } from "../lib/notes.js";
 export function registerSearchNotesTool(server: McpServer): void {
   server.registerTool(
     "search_notes",
@@ -14,19 +12,7 @@ export function registerSearchNotesTool(server: McpServer): void {
     },
     async ({ query, limit }) => {
       try {
-        const json = await readDataFile("notes.json");
-        const notes = notesSchema.parse(JSON.parse(json));
-
-        const keyword = query.toLowerCase();
-
-        const results = notes
-          .filter(
-            (note) =>
-              note.title.toLowerCase().includes(keyword) ||
-              note.category.toLowerCase().includes(keyword) ||
-              note.content.toLowerCase().includes(keyword),
-          )
-          .slice(0, limit ?? 5);
+       const results = (await searchNotes(query)).slice(0, limit ?? 5);
 
         if (results.length === 0) {
           return {

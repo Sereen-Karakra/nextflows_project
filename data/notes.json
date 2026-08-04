@@ -28,5 +28,11 @@
     "title": "GitHub Issues",
     "category": "GitHub",
     "content": "GitHub Issues are used to track tasks, bugs, feature requests, and project discussions."
+  },
+  {
+    "id": 6,
+    "title": "TypeScript",
+    "category": "Programming",
+    "content": "TypeScript adds static typing to JavaScript."
   }
 ]
