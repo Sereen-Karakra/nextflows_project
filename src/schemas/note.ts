@@ -3,6 +3,7 @@ import { z } from "zod";
 export const noteSchema = z.object({
   id: z.number(),
   title: z.string(),
+  category: z.string(),
   content: z.string(),
 });
 

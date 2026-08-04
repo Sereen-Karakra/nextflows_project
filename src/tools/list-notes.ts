@@ -1,8 +1,9 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 
 import { listNotesInputSchema } from "../schemas/list-notes.js";
+import { notesSchema } from "../schemas/note.js";
+import { readDataFile } from "../lib/file.js";
 
-/** EXAMPLE Week 2 stub — list available note/FAQ files. */
 export function registerListNotesTool(server: McpServer): void {
   server.registerTool(
     "list_notes",
@@ -12,23 +13,59 @@ export function registerListNotesTool(server: McpServer): void {
       inputSchema: listNotesInputSchema,
     },
     async ({ folder }) => {
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(
+      try {
+        const json = await readDataFile("notes.json");
+        const notes = notesSchema.parse(JSON.parse(json));
+
+        if (notes.length === 0) {
+          return {
+            content: [
               {
-                stub: true,
-                tool: "list_notes",
-                folder: folder ?? "notes",
-                message: "Replace this stub in Week 3 with a real directory listing.",
+                type: "text",
+                text: JSON.stringify(
+                  {
+                    items: [],
+                    message: "No notes found.",
+                  },
+                  null,
+                  2,
+                ),
               },
-              null,
-              2,
-            ),
-          },
-        ],
-      };
+            ],
+          };
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  items: notes.map((note) => ({
+                    id: note.id,
+                    title: note.title,
+                    category: note.category,
+                  })),
+                  folder: folder ?? "notes",
+                },
+                null,
+                2,
+              ),
+            },
+          ],
+        };
+      } catch (error) {
+        console.error("list_notes:", error);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Failed to load notes.",
+            },
+          ],
+        };
+      }
     },
   );
 }

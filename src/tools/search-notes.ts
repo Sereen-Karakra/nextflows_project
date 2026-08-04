@@ -1,44 +1,77 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 
 import { searchNotesInputSchema } from "../schemas/search-notes.js";
+import { notesSchema } from "../schemas/note.js";
+import { readDataFile } from "../lib/file.js";
 
-/**
- * EXAMPLE Week 2 stub — Notes & FAQ Search (P0 candidate).
- *
- * How to use:
- * 1. Pick Notes & FAQ as your project (or copy this pattern for your idea).
- * 2. Uncomment the import + register call in src/index.ts.
- * 3. Leave the handler as a stub until Week 3 (real data).
- */
 export function registerSearchNotesTool(server: McpServer): void {
   server.registerTool(
     "search_notes",
     {
       description:
-        "Search local notes and FAQ files by keyword. Returns matching snippets with file paths.",
+        "Search local notes by keyword and return matching notes.",
       inputSchema: searchNotesInputSchema,
     },
     async ({ query, limit }) => {
-      // Week 2: stub is intentional. Week 3: replace with a real file search.
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(
+      try {
+        const json = await readDataFile("notes.json");
+        const notes = notesSchema.parse(JSON.parse(json));
+
+        const keyword = query.toLowerCase();
+
+        const results = notes
+          .filter(
+            (note) =>
+              note.title.toLowerCase().includes(keyword) ||
+              note.category.toLowerCase().includes(keyword) ||
+              note.content.toLowerCase().includes(keyword),
+          )
+          .slice(0, limit ?? 5);
+
+        if (results.length === 0) {
+          return {
+            content: [
               {
-                stub: true,
-                tool: "search_notes",
-                query,
-                limit: limit ?? 5,
-                message:
-                  "Replace this stub in Week 3 with a real notes/FAQ search.",
+                type: "text",
+                text: JSON.stringify(
+                  {
+                    items: [],
+                    message: "No matching notes found.",
+                  },
+                  null,
+                  2,
+                ),
               },
-              null,
-              2,
-            ),
-          },
-        ],
-      };
+            ],
+          };
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  items: results,
+                },
+                null,
+                2,
+              ),
+            },
+          ],
+        };
+      } catch (error) {
+        console.error("search_notes:", error);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Failed to search notes.",
+            },
+          ],
+        };
+      }
     },
   );
 }
