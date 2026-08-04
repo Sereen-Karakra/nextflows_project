@@ -4,9 +4,9 @@ This document describes the data source, storage, expected responses, and possib
 
 | Tool | Source | Fixture Path | Auth | Rate Limits | Failure Modes | Example Response |
 |------|--------|--------------|------|-------------|---------------|------------------|
-| `search_notes` | Local JSON | `data/notes.json` | None | None | File not found, empty file, invalid JSON, no matching notes found | `{"results":[{"id":1,"title":"Git Branches","category":"Git"}]}` |
-| `list_notes` | Local JSON | `data/notes.json` | None | None | File not found, empty file, invalid JSON | `{"notes":[{"id":1,"title":"Git Branches"},{"id":2,"title":"Git Merge"},{"id":3,"title":"Model Context Protocol"}]}` |
-| `add_note` | Local JSON | `data/notes.json` | None | None | Missing title, missing content, invalid JSON, failed to save file | `{"success":true,"message":"Note added successfully.","note":{"id":6,"title":"Git Tags","category":"Git"}}` |
+| `search_notes` | Local JSON | `data/notes.json` | None | None | File not found, empty file, invalid JSON, no matching notes found | `{"items":[{"id":1,"title":"Git Branches","category":"Git","content":"A Git branch allows developers to work on features independently without affecting the main branch."}]}` |
+| `list_notes` | Local JSON | `data/notes.json` | None | None | File not found, empty file, invalid JSON | `{"items":[{"id":1,"title":"Git Branches","category":"Git"}],"total":5,"folder":"notes"}` |
+| `add_note` | Local JSON | `data/notes.json` | None | None | Missing title, missing category, missing content, invalid JSON, failed to save file | `{"success":true,"message":"Note added successfully.","note":{"id":6,"title":"Git Tags","category":"Git","content":"Example content"}}` |
 
 ---
 
@@ -16,7 +16,7 @@ This document describes the data source, storage, expected responses, and possib
 
 ```json
 {
-  "results": [
+  "items": [
     {
       "id": 1,
       "title": "Git Branches",
@@ -31,20 +31,25 @@ This document describes the data source, storage, expected responses, and possib
 
 ```json
 {
-  "notes": [
+  "items": [
     {
       "id": 1,
-      "title": "Git Branches"
+      "title": "Git Branches",
+      "category": "Git"
     },
     {
       "id": 2,
-      "title": "Git Merge"
+      "title": "Git Merge",
+      "category": "Git"
     },
     {
       "id": 3,
-      "title": "Model Context Protocol"
+      "title": "Model Context Protocol",
+      "category": "MCP"
     }
-  ]
+  ],
+  "total": 5,
+  "folder": "notes"
 }
 ```
 
@@ -57,7 +62,8 @@ This document describes the data source, storage, expected responses, and possib
   "note": {
     "id": 6,
     "title": "Git Tags",
-    "category": "Git"
+    "category": "Git",
+    "content": "Example content"
   }
 }
 ```
