@@ -1,8 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 
 import { listNotesInputSchema } from "../schemas/list-notes.js";
-import { notesSchema } from "../schemas/note.js";
-import { readDataFile } from "../lib/file.js";
+import { listNotes } from "../lib/notes.js";
 
 export function registerListNotesTool(server: McpServer): void {
   server.registerTool(
@@ -14,8 +13,7 @@ export function registerListNotesTool(server: McpServer): void {
     },
     async ({ folder }) => {
       try {
-        const json = await readDataFile("notes.json");
-        const notes = notesSchema.parse(JSON.parse(json));
+        const notes = await listNotes();
 
         if (notes.length === 0) {
           return {
@@ -41,11 +39,8 @@ export function registerListNotesTool(server: McpServer): void {
               type: "text",
               text: JSON.stringify(
                 {
-                  items: notes.map((note) => ({
-                    id: note.id,
-                    title: note.title,
-                    category: note.category,
-                  })),
+                  items: notes.slice(0, 10),
+                  total: notes.length,
                   folder: folder ?? "notes",
                 },
                 null,
