@@ -1,14 +1,18 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
+
 import { registerGreetTool } from "./tools/greet.js";
-// Week 2: import and register your project tools here, for example:
 import { registerSearchNotesTool } from "./tools/search-notes.js";
 import { registerListNotesTool } from "./tools/list-notes.js";
 import { registerAddNoteTool } from "./tools/add-note.js";
 
+import { registerNotesFaqResource } from "./resources/notes-faq.js";
+import { registerNotesIndexResource } from "./resources/notes-index.js";
+import { registerNotesSchemaResource } from "./resources/notes-schema.js";
+
 /**
  * Factory used by stdio (and later HTTP) so every connection gets a fresh server.
- * Register all tools inside this function — never on a shared global instance.
+ * Register all tools and resources inside this function.
  */
 function createServer(): McpServer {
   const server = new McpServer({
@@ -16,13 +20,16 @@ function createServer(): McpServer {
     version: "0.1.0",
   });
 
-  // Week 1 — one working tool so you can verify Inspector immediately
+  // Tools
   registerGreetTool(server);
-
-  // Week 2 — register your multi-tool skeleton (stubs are OK)
   registerSearchNotesTool(server);
   registerListNotesTool(server);
   registerAddNoteTool(server);
+
+  // Week 3.5 — Resources
+  registerNotesFaqResource(server);
+  registerNotesIndexResource(server);
+  registerNotesSchemaResource(server);
 
   return server;
 }
