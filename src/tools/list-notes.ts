@@ -14,6 +14,9 @@ export function registerListNotesTool(server: McpServer): void {
     async ({ folder }) => {
       try {
         const notes = await listNotes();
+        const maxItems = 10;
+        const items = notes.slice(0, maxItems);
+        const truncated = notes.length > maxItems;
 
         if (notes.length === 0) {
           return {
@@ -39,9 +42,15 @@ export function registerListNotesTool(server: McpServer): void {
               type: "text",
               text: JSON.stringify(
                 {
-                  items: notes.slice(0, 10),
+                  items,
                   total: notes.length,
+                  truncated,
                   folder: folder ?? "notes",
+                  ...(truncated
+                    ? {
+                        message: `Results truncated to ${maxItems} items.`,
+                      }
+                    : {}),
                 },
                 null,
                 2,
