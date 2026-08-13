@@ -4,6 +4,7 @@ export const searchNotesInputSchema = z.object({
   query: z
     .string()
     .min(1)
+    .max(200)
     .describe("Keyword or phrase to search for inside notes and FAQ files"),
   limit: z
     .number()

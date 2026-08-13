@@ -2,73 +2,74 @@
 
 > Mandatory for mentor review. Open a GitHub Issue linking to this file before Week 3.
 
-**Student:**  
-**Repo:**  
-**Branch:** `week-2-design`  
-**GitHub Issue:**  
+**Student:** Nagham Halloum & Sereen Karakra  
+**Repo:** https://github.com/Sereen-Karakra/nextflows_project  
+**Branch:** week-3-data  
+**GitHub Issue:** https://github.com/Sereen-Karakra/nextflows_project/issues/2
 
 ---
 
 ## 1. Pitch
 
-One paragraph: what you are building and who it helps.
+The project is a Notes MCP Server that allows AI models to search, list, and add notes stored in a local JSON file. It provides a simple offline knowledge base that demonstrates how MCP tools and resources can expose structured information to AI assistants.
 
 ## 2. Demo Day user story
 
-Describe a 2–3 minute live demo:
-
-1. Host / Inspector starts
-2. User asks for …
-3. Model calls tool(s) …
-4. Audience sees …
+1. The MCP Inspector starts and connects to the server.
+2. The user asks to search for notes about Git.
+3. The model calls the `search_notes` tool and retrieves matching notes.
+4. The audience sees the returned results, lists available notes, adds a new note, and reads documentation through MCP Resources.
 
 ## 3. Tool inventory (4–7 tools)
 
-Mark exactly **three** tools as **P0** (must work for Demo Day). Others can be P1 stubs.
-
-| Priority | Tool name (`verb_noun`) | Description (for the model) | Inputs | Outputs |
+| Priority | Tool name | Description | Inputs | Outputs |
 | --- | --- | --- | --- | --- |
-| P0 |  |  |  |  |
-| P0 |  |  |  |  |
-| P0 |  |  |  |  |
-| P1 |  |  |  |  |
-| P1 |  |  |  |  |
+| P0 | search_notes | Search notes by keyword | query, limit | Matching notes |
+| P0 | list_notes | List available notes | folder (optional) | Note summaries |
+| P0 | add_note | Add a new note | title, category, content | Success message and created note |
+| P1 | greet | Simple greeting tool | name | Greeting message |
 
 ## 4. Out of scope
 
-List what you will **not** build in this cohort (auth, paid APIs, mobile UI, etc.).
-
--
-
--
-
--
+- Authentication
+- External paid APIs
+- Mobile or web user interface
 
 ## 5. Success criteria
 
-You succeed on Demo Day if:
-
-- [ ]
-- [ ]
-- [ ]
+- [x] Three P0 tools work with real data.
+- [x] Resources are available and readable in MCP Inspector.
+- [x] Project works completely offline using local fixtures.
 
 ## 6. Top risks
 
 | Risk | Likelihood | Mitigation |
 | --- | --- | --- |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Invalid JSON data | Medium | Validate using Zod schemas |
+| Missing data file | Low | Return friendly error message |
+| Unexpected tool input | Medium | Validate inputs before processing |
 
 ## 7. Evidence for Week 2
 
-- [ ] `docs/project-choice.md` filled
-- [ ] ≥3 Zod schemas under `src/schemas/`
-- [ ] Tools registered (stubs OK)
-- [ ] `examples/<tool>.json` for each registered tool
-- [ ] Inspector screenshots attached to the GitHub Issue
+- [x] `docs/project-choice.md` filled
+- [x] ≥3 Zod schemas under `src/schemas/`
+- [x] Tools registered
+- [x] `examples/<tool>.json` for each registered tool
+- [x] Inspector screenshots attached to the GitHub Issue
+
+---
+
+## 8. Resources (Week 3.5)
+
+The project exposes three read-only MCP resources that provide useful context without requiring a tool call.
+
+| URI | Purpose | Type |
+|------|---------|------|
+| `notes://faq` | Frequently asked questions | Static Markdown |
+| `notes://index` | Read-only list of note titles and categories | Dynamic JSON |
+| `notes://schema` | Tool input/output schema cheat sheet | Static Markdown |
 
 ## Mentor decision
 
-- Status: pending / approved / changes requested
+- Status: Pending
 - Comments:

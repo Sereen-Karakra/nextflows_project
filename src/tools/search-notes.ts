@@ -1,44 +1,74 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 
 import { searchNotesInputSchema } from "../schemas/search-notes.js";
+import { searchNotes } from "../lib/notes.js";
 
-/**
- * EXAMPLE Week 2 stub — Notes & FAQ Search (P0 candidate).
- *
- * How to use:
- * 1. Pick Notes & FAQ as your project (or copy this pattern for your idea).
- * 2. Uncomment the import + register call in src/index.ts.
- * 3. Leave the handler as a stub until Week 3 (real data).
- */
 export function registerSearchNotesTool(server: McpServer): void {
   server.registerTool(
     "search_notes",
     {
       description:
-        "Search local notes and FAQ files by keyword. Returns matching snippets with file paths.",
+        "Search local notes by keyword and return matching notes.",
       inputSchema: searchNotesInputSchema,
     },
     async ({ query, limit }) => {
-      // Week 2: stub is intentional. Week 3: replace with a real file search.
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(
+      try {
+        const allResults = await searchNotes(query);
+        const maxResults = limit ?? 5;
+        const results = allResults.slice(0, maxResults);
+        const truncated = allResults.length > maxResults;
+
+        if (results.length === 0) {
+          return {
+            content: [
               {
-                stub: true,
-                tool: "search_notes",
-                query,
-                limit: limit ?? 5,
-                message:
-                  "Replace this stub in Week 3 with a real notes/FAQ search.",
+                type: "text",
+                text: JSON.stringify(
+                  {
+                    items: [],
+                    message: "No matching notes found.",
+                  },
+                  null,
+                  2,
+                ),
               },
-              null,
-              2,
-            ),
-          },
-        ],
-      };
+            ],
+          };
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  items: results,
+                  total: allResults.length,
+                  truncated,
+                  ...(truncated
+                    ? {
+                        message: `Results truncated to ${maxResults} items.`,
+                      }
+                    : {}),
+                },
+                null,
+                2,
+              ),
+            },
+          ],
+        };
+      } catch (error) {
+        console.error("search_notes:", error);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Failed to search notes.",
+            },
+          ],
+        };
+      }
     },
   );
 }

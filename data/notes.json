@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Git Branches",
+    "category": "Git",
+    "content": "A Git branch allows developers to work on features independently without affecting the main branch."
+  },
+  {
+    "id": 2,
+    "title": "Git Merge",
+    "category": "Git",
+    "content": "Git merge combines changes from one branch into another branch."
+  },
+  {
+    "id": 3,
+    "title": "Model Context Protocol",
+    "category": "MCP",
+    "content": "Model Context Protocol (MCP) is an open standard that enables AI models to communicate with external tools through a consistent interface."
+  },
+  {
+    "id": 4,
+    "title": "Pull Request",
+    "category": "GitHub",
+    "content": "A pull request allows developers to propose changes, review code, and merge updates into another branch."
+  },
+  {
+    "id": 5,
+    "title": "GitHub Issues",
+    "category": "GitHub",
+    "content": "GitHub Issues are used to track tasks, bugs, feature requests, and project discussions."
+  }
+]

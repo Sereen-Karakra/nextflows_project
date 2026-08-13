@@ -4,9 +4,18 @@ export const addNoteInputSchema = z.object({
   title: z
     .string()
     .min(1)
-    .describe("Short title used as the note file name stem"),
-  body: z
+    .max(100)
+    .describe("Title of the new note"),
+
+  category: z
     .string()
     .min(1)
-    .describe("Full note content to save as plain text"),
+    .max(50)
+    .describe("Category of the note"),
+
+  content: z
+    .string()
+    .min(1)
+    .max(5000)
+    .describe("Content of the note"),
 });
