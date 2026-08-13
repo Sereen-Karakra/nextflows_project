@@ -1,167 +1,466 @@
-# MCPRepo — NextFlows Academy Starter
+# MCPRepo — Notes MCP Server
 
-> Part of **[NextFlows Academy](https://nextflows.ai/academy)** — the free cohort program **Building an MCP for an AI Engine**.
+> A TypeScript Model Context Protocol (MCP) server built as part of the NextFlows Academy cohort **Building an MCP for an AI Engine**.
 
-Clone this repo to build your **Model Context Protocol (MCP)** server in TypeScript. By Demo Day you will ship a public GitHub repo with real tools, Zod validation, docs, and a live demo — the same path used in the free NextFlows Academy cohort.
+This project is a simple offline **Notes MCP Server** that allows an AI model to search, list, and add notes stored in a local JSON file.
 
-**Program hub:** [nextflows.ai/academy](https://nextflows.ai/academy)  
-**Full program page (in this repo):** [`docs/PROGRAM.md`](docs/PROGRAM.md)  
-**Apply:** [Cohort application](https://nextflows.ai/academy/apply?cohort=1&program=building-mcp-ai-engines)
+The project demonstrates MCP tools, Zod input validation, local data access, MCP resources, security hardening, and testing through MCP Inspector.
 
 ---
 
-## About NextFlows Academy
+## Project Overview
 
-[NextFlows Academy](https://nextflows.ai/academy) runs structured, cohort-based programs with live sessions, mentor support, and a real project you ship by the end.
+The Notes MCP Server provides three main P0 tools:
 
-This repository belongs to:
+| Priority | Tool | Purpose |
+| --- | --- | --- |
+| P0 | `search_notes` | Search notes by keyword or phrase |
+| P0 | `list_notes` | List available notes |
+| P0 | `add_note` | Add a new note to the local collection |
+| P1 | `greet` | Simple greeting tool |
 
-| | |
-| --- | --- |
-| **Program** | Building an MCP for an AI Engine |
-| **Audience** | 4th & 5th year CS / CE students |
-| **Duration** | 6 weeks |
-| **Format** | Cohort + project |
-| **Price** | Free |
-| **Level** | Intermediate |
-| **Outcome** | Shipped MCP server on GitHub |
-| **Schedule** | Wed & Sat online 1:30–3:30 PM + Monday on-site workshop days |
+The notes are stored locally in:
 
-You go from “what’s an MCP?” to a working MCP server connected to an AI engine (for example Claude), fully documented, and live on GitHub.
+```text
+data/notes.json
+```
 
-See [`docs/PROGRAM.md`](docs/PROGRAM.md) for outcomes, weekly plan, starter projects, and who it’s for.
+The current P0 tools work completely offline using local data.
 
 ---
-
-## What you get
-
-| Path | Purpose |
-| --- | --- |
-| `src/index.ts` | MCP server + stdio transport |
-| `src/tools/` | One register helper per tool |
-| `src/schemas/` | Zod input contracts (with `.describe(...)`) |
-| `examples/` | Sample JSON args for Inspector |
-| `docs/PROGRAM.md` | Full NextFlows Academy program page |
-| `docs/WEEK-2.md` | Full Week 2 step-by-step plan |
-| `docs/CURRICULUM.md` | 6-week overview |
-| `docs/project-choice.md` | Week 2 project choice template |
-| `docs/design.md` | Week 2 design doc template |
-
-**Week 1 is already wired:** a working `greet` tool so you can open Inspector on day one.
-
-**Week 2 examples included:** stub tools for *Notes & FAQ Search* (`search_notes`, `list_notes`, `add_note`). Enable them when you pick that starter (or copy the pattern for your own idea).
 
 ## Prerequisites
 
-- Node.js **20+** (`node -v`)
-- npm (`npm -v`)
-- Git + a GitHub account
-- Cursor or VS Code
+- Node.js 20 or later
+- npm
+- Git
+- VS Code or Cursor
 
-## Quick start
+Check your versions:
 
 ```bash
-git clone <YOUR_FORK_OR_ORG_URL>/MCPRepo.git
-cd MCPRepo
-npm install
-npm run inspect
+node -v
+npm -v
 ```
 
-In the Inspector browser tab:
+---
 
-1. Click **Connect**
-2. Open **Tools**
-3. Select `greet` and put `Alex` in the **name** field (see `examples/greet.json` for the full args shape)
-4. Try invalid input (empty name) and confirm Zod rejects it
+## Installation
 
-To run the server alone (waits on stdin):
+Clone the repository and install dependencies:
+
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd nextflows_project
+npm install
+```
+
+---
+
+## Running the MCP Server
+
+Start the MCP server with:
+
+```bash
+npm start
+```
+
+You can also run:
 
 ```bash
 npm run dev
 ```
 
-> **Important:** log only with `console.error`. Never use `console.log` — stdout is reserved for the MCP protocol.
+Both commands start the server using the stdio transport.
 
-## Week 2
+Stop the server with `Ctrl+C`.
 
-Week 2 is design-first. Follow [`docs/WEEK-2.md`](docs/WEEK-2.md).
+---
 
-Useful scripts:
+## Running MCP Inspector
 
-| Script | What it does |
-| --- | --- |
-| `npm run dev` | Start the MCP server on stdio (stays alive; stop with Ctrl+C) |
-| `npm start` | Same as `dev` |
-| `npm run inspect` | Open MCP Inspector against this server |
+The recommended way to test the project is through MCP Inspector:
 
-## Stack
+```bash
+npm run inspect
+```
 
-- TypeScript via `tsx` (no build step early on)
-- Official MCP TypeScript SDK (`@modelcontextprotocol/server`)
-- Zod for tool `inputSchema`
-- [MCP Inspector](https://github.com/modelcontextprotocol/inspector) for local testing
-- stdio transport for Claude Desktop / Cursor demos
+In the Inspector:
 
-## Six-week journey
+1. Open the **Tools** tab.
+2. Confirm that the four tools are available.
+3. Test `search_notes`.
+4. Test `list_notes`.
+5. Test `add_note`.
+6. Test invalid input and confirm that validation rejects it.
+7. Open the **Resources** tab and verify the available resources.
 
-| Week | Focus |
-| --- | --- |
-| 1 | Set up & first MCP tool (`greet` ✅ in this repo) |
-| 2 | Design your own tools → see [`docs/WEEK-2.md`](docs/WEEK-2.md) |
-| 3 | Connect tools to real data |
-| 4 | Make it safe & reliable |
-| 5 | Test & write docs people can follow |
-| 6 | Ship on GitHub & Demo Day |
+---
 
-Full program details: [`docs/PROGRAM.md`](docs/PROGRAM.md)
+# P0 Tools
 
-## Starter project options (pick in Week 2)
+## `search_notes`
 
-1. **Notes & FAQ Search** — fully offline (example stubs included)
-2. **Personal Expense Tracker** — summarize spending from a spreadsheet
-3. **To-Do List** — create / list / complete tasks
-4. **Weather Briefing** — free API (e.g. Open-Meteo), no paid keys
-5. **Quote of the Day** — simple offline or public API
+Searches the local notes collection using a keyword or phrase.
 
-Advanced ideas (repo health, course planner, job tracker) need **mentor approval** before you expand scope.
+### Inputs
 
-## Repo layout after Week 2
+| Input | Type | Required | Limits |
+| --- | --- | --- | --- |
+| `query` | string | Yes | 1–200 characters |
+| `limit` | number | No | Integer from 1–20 |
+
+Example:
+
+```json
+{
+  "query": "Git",
+  "limit": 5
+}
+```
+
+The tool searches note titles, categories, and content.
+
+The number of returned results is limited according to the validated `limit`, with a default of 5.
+
+If no notes match the query, the tool returns an empty result with a clear message.
+
+If results are truncated, the response indicates that the output was truncated.
+
+---
+
+## `list_notes`
+
+Lists the available notes in the local collection.
+
+### Input
+
+| Input | Type | Required | Limits |
+| --- | --- | --- | --- |
+| `folder` | string | No | 1–100 characters |
+
+Example:
+
+```json
+{
+  "folder": "notes"
+}
+```
+
+The current implementation does not use the `folder` value to access arbitrary filesystem paths. It is returned as part of the response.
+
+The tool returns a maximum of 10 note summaries and reports when the results are truncated.
+
+---
+
+## `add_note`
+
+Adds a new note to the local notes collection.
+
+### Inputs
+
+| Input | Type | Required | Limits |
+| --- | --- | --- | --- |
+| `title` | string | Yes | 1–100 characters |
+| `category` | string | Yes | 1–50 characters |
+| `content` | string | Yes | 1–5000 characters |
+
+Example:
+
+```json
+{
+  "title": "Git Branches",
+  "category": "Git",
+  "content": "A Git branch allows developers to work on features independently."
+}
+```
+
+A successful request returns the created note and its generated ID.
+
+---
+
+# Input Validation
+
+Tool inputs are validated using **Zod** before the tool logic is executed.
+
+The current P0 schemas enforce:
+
+- Required string fields
+- Minimum string lengths
+- Maximum string lengths
+- Integer validation for `limit`
+- Minimum and maximum values for `limit`
+
+Current limits include:
 
 ```text
-MCPRepo/
+search_notes.query    → 1–200 characters
+search_notes.limit    → integer 1–20
+add_note.title        → 1–100 characters
+add_note.category     → 1–50 characters
+add_note.content      → 1–5000 characters
+list_notes.folder     → 1–100 characters
+```
+
+Invalid or missing required input is rejected before the corresponding tool operation is performed.
+
+---
+
+# Security Hardening
+
+The Week 4 hardening work focuses on input validation, filesystem boundaries, network protection, output limits, error handling, and secret handling.
+
+## Input Validation
+
+Zod schemas apply minimum and maximum limits to user-controlled string inputs.
+
+Invalid or missing required inputs are rejected with validation errors.
+
+For example, submitting `add_note` without the required `content` field is rejected by input validation.
+
+## Filesystem Path Protection
+
+Local data access is restricted to the intended `data` directory.
+
+The file helper uses `path.resolve()` and `path.relative()` and verifies that the resolved path does not escape the data directory.
+
+Paths outside the allowed data directory are rejected.
+
+The current P0 tools do not allow the model to directly choose an arbitrary filesystem path.
+
+## Network Protection
+
+The shared HTTP helper uses an explicit HTTPS hostname allowlist.
+
+Currently allowed host:
+
+```text
+api.open-meteo.com
+```
+
+Only HTTPS URLs are accepted.
+
+Requests to hosts outside the allowlist are rejected.
+
+The current P0 tools do not make network requests, but the shared HTTP helper is protected before it can be used by a tool.
+
+## Network Timeouts
+
+Network requests use an 8-second timeout through `AbortSignal.timeout()`.
+
+Timed-out requests return a clear timeout error instead of waiting indefinitely.
+
+## Output Limits
+
+The P0 note tools limit the amount of returned data.
+
+- `search_notes` limits returned results according to the validated `limit`.
+- `list_notes` returns at most 10 note summaries.
+- Truncated responses include an indication that the output was capped.
+
+## Error Handling
+
+Tool errors returned to the model are short and actionable.
+
+Raw stack traces are not returned as tool responses.
+
+Examples include:
+
+```text
+Failed to add note.
+Failed to search notes.
+Failed to load notes.
+```
+
+---
+
+# Secrets and Environment Variables
+
+The current P0 tools do not require API keys or external credentials.
+
+The repository protects environment files through `.gitignore`:
+
+```text
+.env
+.env.*
+!.env.example
+```
+
+A placeholder `.env.example` file is included for future configuration.
+
+No real secrets are required by the current P0 tools.
+
+---
+
+# Security Testing
+
+The Week 4 hardening was tested using MCP Inspector.
+
+## Invalid `add_note` input
+
+An `add_note` request was submitted without the required `content` field.
+
+The Inspector returned an input validation error:
+
+```text
+Tool Error
+Input validation error: Invalid arguments for tool add_note:
+content: Invalid input: expected string, received undefined
+```
+
+This confirms that invalid input is rejected by the tool schema.
+
+## Input length limits
+
+The schemas enforce maximum input lengths.
+
+The MCP Inspector reflects these limits in its input fields, preventing values beyond the configured maximum from being submitted through the UI.
+
+## Filesystem boundary
+
+The shared file helper resolves paths and rejects paths that escape the configured data directory.
+
+## Network allowlist
+
+The shared HTTP helper accepts only HTTPS requests to explicitly allowlisted hosts.
+
+## Network timeout
+
+Network requests are cancelled after the configured timeout.
+
+---
+
+# Demo Path
+
+The recommended demo flow is:
+
+1. Start MCP Inspector:
+
+```bash
+npm run inspect
+```
+
+2. Open the **Tools** tab.
+
+3. Demonstrate `search_notes` using a query such as `Git`.
+
+4. Demonstrate `list_notes` and show the available note summaries.
+
+5. Demonstrate `add_note` with valid title, category, and content.
+
+6. Demonstrate input validation by submitting `add_note` without the required `content` field.
+
+7. Show that the invalid request is rejected with a validation error.
+
+8. Open the **Resources** tab and demonstrate the available MCP resources.
+
+This demonstrates the three P0 tools and one rejected invalid-input case.
+
+---
+
+# MCP Resources
+
+The server provides three read-only MCP resources:
+
+| URI | Purpose | Type |
+| --- | --- | --- |
+| `notes://faq` | Frequently asked questions about the notes tools | Markdown |
+| `notes://index` | List of note titles and categories | JSON |
+| `notes://schema` | Tool input/output schema cheat sheet | Markdown |
+
+These resources can be viewed through the **Resources** tab in MCP Inspector.
+
+---
+
+# Project Structure
+
+```text
+nextflows_project/
+├── data/
+│   └── notes.json
 ├── docs/
 │   ├── PROGRAM.md
 │   ├── CURRICULUM.md
 │   ├── WEEK-2.md
 │   ├── project-choice.md
-│   └── design.md
-├── examples/
-│   └── <tool_name>.json
+│   ├── design.md
+│   ├── threat-model.md
+│   └── week-4-threat-model.md
 ├── src/
 │   ├── index.ts
+│   ├── lib/
+│   │   ├── file.ts
+│   │   ├── http.ts
+│   │   └── notes.ts
+│   ├── resources/
+│   │   ├── notes-faq.ts
+│   │   ├── notes-index.ts
+│   │   └── notes-schema.ts
 │   ├── schemas/
+│   │   ├── add-note.ts
+│   │   ├── greet.ts
+│   │   ├── list-notes.ts
+│   │   ├── note.ts
+│   │   └── search-notes.ts
 │   └── tools/
+│       ├── add-note.ts
+│       ├── greet.ts
+│       ├── list-notes.ts
+│       └── search-notes.ts
+├── .env.example
+├── .gitignore
 ├── package.json
-└── README.md
+├── README.md
+└── SECURITY.md
 ```
 
-## Rules that matter
+---
 
-- One job per tool; use `verb_noun` names (`search_notes`, `add_expense`)
-- Write descriptions for the **model**, not only for humans
-- Every Zod field needs `.describe(...)`
-- Prefer small focused tools over one mega-tool with an `action` enum
-- Avoid paid APIs / OAuth-heavy projects in Weeks 1–2
+# Project Documentation
 
-## Links
+Important documentation includes:
 
-- [NextFlows Academy](https://nextflows.ai/academy)
-- [Program page (this repo)](docs/PROGRAM.md)
-- [Apply for Cohort #1](https://nextflows.ai/academy/apply?cohort=1&program=building-mcp-ai-engines)
-- [MCP docs](https://modelcontextprotocol.io/docs)
-- [MCP specification](https://modelcontextprotocol.io/specification/latest)
-- [Build your first server (TypeScript SDK)](https://ts.sdk.modelcontextprotocol.io/v2/get-started/first-server.html)
+- `docs/design.md` — Project design and tool inventory
+- `docs/threat-model.md` — Initial threat model
+- `docs/week-4-threat-model.md` — Week 4 security threat model
+- `docs/PROGRAM.md` — NextFlows Academy program
+- `docs/CURRICULUM.md` — Six-week curriculum
 
-## License
+---
 
-MIT — built for [NextFlows Academy](https://nextflows.ai/academy) students.
+# NPM Scripts
+
+| Command | Purpose |
+| --- | --- |
+| `npm start` | Start the MCP server |
+| `npm run dev` | Start the MCP server in development |
+| `npm run inspect` | Start MCP Inspector with the server |
+
+---
+
+# Technology Stack
+
+- TypeScript
+- Node.js 20+
+- `@modelcontextprotocol/server`
+- Zod
+- `tsx`
+- MCP Inspector
+- stdio transport
+- Local JSON data
+
+---
+
+# NextFlows Academy
+
+This project is part of the **NextFlows Academy — Building an MCP for an AI Engine** cohort.
+
+Program hub:
+
+https://nextflows.ai/academy
+
+---
+
+# License
+
+MIT
