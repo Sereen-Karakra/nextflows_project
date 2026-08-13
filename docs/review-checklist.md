@@ -184,9 +184,9 @@ Overall, the project is in good shape for the Week 4 hardening review and can mo
 - [x] Output caps reviewed
 - [x] README updated
 - [x] No P0 findings identified
-- [ ] Peer confirmation of the README fix
-- [ ] Hardening PR merged after peer confirmation
-- [ ] Week 4 issue updated as ready to move on
+- [x] Peer confirmation of the README fix
+- [x] Hardening PR merged after peer confirmation
+- [x] Week 4 issue updated as ready to move on
 
 ---
 
