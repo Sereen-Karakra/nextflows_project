@@ -9,9 +9,7 @@ export async function loadNotes(): Promise<Note[]> {
   return notesSchema.parse(JSON.parse(json));
 }
 
-export async function searchNotes(query: string): Promise<Note[]> {
-  const notes = await loadNotes();
-
+export function filterNotes(notes: Note[], query: string): Note[] {
   const keyword = query.toLowerCase();
 
   return notes.filter(
@@ -20,6 +18,11 @@ export async function searchNotes(query: string): Promise<Note[]> {
       note.category.toLowerCase().includes(keyword) ||
       note.content.toLowerCase().includes(keyword),
   );
+}
+
+export async function searchNotes(query: string): Promise<Note[]> {
+  const notes = await loadNotes();
+  return filterNotes(notes, query);
 }
 
 export async function listNotes(): Promise<

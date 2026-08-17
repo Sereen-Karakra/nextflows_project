@@ -435,6 +435,7 @@ Important documentation includes:
 | `npm start` | Start the MCP server |
 | `npm run dev` | Start the MCP server in development |
 | `npm run inspect` | Start MCP Inspector with the server |
+| `npm test` | Run the automated smoke tests for the pure note-filtering helper |
 
 ---
 
