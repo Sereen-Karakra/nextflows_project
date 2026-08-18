@@ -187,6 +187,8 @@ Add a note titled "Git Branches" in the "Git" category with content about workin
 
 You can also test the same operations directly through MCP Inspector.
 
+For more complete examples of using the Notes MCP Server with a model, see [Example Conversations](examples/conversations.md).
+
 ---
 
 ## Troubleshooting
