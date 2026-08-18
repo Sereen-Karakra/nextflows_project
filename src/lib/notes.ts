@@ -1,7 +1,6 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 
-import { readDataFile } from "./file.js";
+import { readDataFile, DATA_DIR } from "./file.js";
 import { notesSchema, type Note } from "../schemas/note.js";
 
 export async function loadNotes(): Promise<Note[]> {
@@ -56,7 +55,7 @@ export async function addNote(
 
   notes.push(newNote);
 
-  const filePath = path.resolve(process.cwd(), "data", "notes.json");
+  const filePath = DATA_DIR + "\\notes.json";
 
   await fs.writeFile(
     filePath,
