@@ -5,6 +5,7 @@ import { registerGreetTool } from "./tools/greet.js";
 import { registerSearchNotesTool } from "./tools/search-notes.js";
 import { registerListNotesTool } from "./tools/list-notes.js";
 import { registerAddNoteTool } from "./tools/add-note.js";
+import { registerUpdateNoteTool } from "./tools/update-note.js";
 
 import { registerNotesFaqResource } from "./resources/notes-faq.js";
 import { registerNotesIndexResource } from "./resources/notes-index.js";
@@ -25,6 +26,7 @@ function createServer(): McpServer {
   registerSearchNotesTool(server);
   registerListNotesTool(server);
   registerAddNoteTool(server);
+  registerUpdateNoteTool(server);
 
   // Week 3.5 — Resources
   registerNotesFaqResource(server);

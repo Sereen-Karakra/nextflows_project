@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { filterNotes } from "./notes.js";
+import { filterNotes, updateNote } from "./notes.js";
+
 import type { Note } from "../schemas/note.js";
 
 const notes: Note[] = [
@@ -57,4 +58,30 @@ test("filterNotes returns an empty array when there are no matches", () => {
   const result = filterNotes(notes, "database");
 
   assert.deepEqual(result, []);
+});
+
+test("updateNote updates an existing note", async () => {
+  const result = await updateNote(
+    1,
+    "Git Branches Updated",
+    "Git",
+    "Updated content about Git branches.",
+  );
+
+  assert.equal(result.id, 1);
+  assert.equal(result.title, "Git Branches Updated");
+  assert.equal(result.category, "Git");
+  assert.equal(result.content, "Updated content about Git branches.");
+});
+
+test("updateNote throws an error when note does not exist", async () => {
+  await assert.rejects(
+    updateNote(
+      999,
+      "Test",
+      "Testing",
+      "This note should not be updated.",
+    ),
+    /Note with ID 999 not found/,
+  );
 });

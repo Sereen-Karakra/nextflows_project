@@ -65,3 +65,37 @@ export async function addNote(
 
   return newNote;
 }
+
+export async function updateNote(
+  id: number,
+  title: string,
+  category: string,
+  content: string,
+): Promise<Note> {
+  const notes = await loadNotes();
+
+  const noteIndex = notes.findIndex((note) => note.id === id);
+
+  if (noteIndex === -1) {
+    throw new Error(`Note with ID ${id} not found.`);
+  }
+
+  const updatedNote: Note = {
+    id,
+    title,
+    category,
+    content,
+  };
+
+  notes[noteIndex] = updatedNote;
+
+  const filePath = DATA_DIR + "\\notes.json";
+
+  await fs.writeFile(
+    filePath,
+    JSON.stringify(notes, null, 2),
+    "utf-8",
+  );
+
+  return updatedNote;
+}
