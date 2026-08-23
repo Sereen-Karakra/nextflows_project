@@ -9,6 +9,8 @@ The server provides tools for:
 - Searching notes by keyword or phrase.
 - Listing available notes.
 - Adding new notes.
+- Updating existing notes.
+- Deleting existing notes.
 
 Notes are stored locally in:
 
@@ -86,7 +88,7 @@ npm run inspect
 Then:
 
 1. Open the **Tools** tab.
-2. Confirm that `search_notes`, `list_notes`, and `add_note` are available.
+2. Confirm that `search_notes`, `list_notes`, `add_note`, `update_note`, and `delete_note` are available.
 3. Select a tool.
 4. Enter the required input.
 5. Run the tool and inspect the response.
@@ -102,6 +104,8 @@ The server also exposes read-only MCP resources that can be viewed from the **Re
 | `search_notes` | Search local notes by title, category, or content. | `query`, optional `limit` |
 | `list_notes` | List available note summaries. | optional `folder` |
 | `add_note` | Add a new note to the local notes collection. | `title`, `category`, `content` |
+| `update_note` | Update an existing note in the local notes collection. | `id`, `title`, `category`, `content` |
+| `delete_note` | Delete an existing note from the local notes collection. | `id` |
 
 ### `search_notes`
 
@@ -163,6 +167,48 @@ Input limits:
 
 A successful request returns the created note and its generated ID.
 
+### `update_note`
+
+Updates an existing note in the local notes collection.
+
+Example input:
+
+```json
+{
+  "id": 1,
+  "title": "Git Branches Updated",
+  "category": "Git",
+  "content": "Updated content about Git branches."
+}
+```
+
+Input limits:
+
+- `id`: integer
+- `title`: 1–100 characters
+- `category`: 1–50 characters
+- `content`: 1–5000 characters
+
+The tool returns an error if the specified note ID does not exist.
+
+### `delete_note`
+
+Deletes an existing note from the local notes collection.
+
+Example input:
+
+```json
+{
+  "id": 1
+}
+```
+
+Input limits:
+
+- `id`: integer
+
+The tool returns an error if the specified note ID does not exist.
+
 ---
 
 ## Example prompts
@@ -183,6 +229,14 @@ Find notes related to MCP.
 
 ```text
 Add a note titled "Git Branches" in the "Git" category with content about working with branches.
+```
+
+```text
+Update note 1 with a new title, category, and content.
+```
+
+```text
+Delete my note with ID 1.
 ```
 
 You can also test the same operations directly through MCP Inspector.
@@ -235,6 +289,8 @@ Check the required fields and their limits:
 - `search_notes`: `query` is required; `limit` must be an integer from 1–20.
 - `list_notes`: `folder` is optional, but if provided it must be a non-empty string up to 100 characters.
 - `add_note`: `title`, `category`, and `content` are required and must stay within their configured limits.
+- `update_note`: `id` must be an integer; `title`, `category`, and `content` must stay within their configured limits.
+- `delete_note`: `id` must be an integer and must refer to an existing note.
 
 For example, a valid `search_notes` request is:
 
