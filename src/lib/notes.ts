@@ -99,3 +99,27 @@ export async function updateNote(
 
   return updatedNote;
 }
+
+export async function deleteNote(id: number): Promise<Note> {
+  const notes = await loadNotes();
+
+  const noteIndex = notes.findIndex((note) => note.id === id);
+
+  if (noteIndex === -1) {
+    throw new Error(`Note with ID ${id} not found.`);
+  }
+
+  const deletedNote = notes[noteIndex];
+
+  notes.splice(noteIndex, 1);
+
+  const filePath = DATA_DIR + "\\notes.json";
+
+  await fs.writeFile(
+    filePath,
+    JSON.stringify(notes, null, 2),
+    "utf-8",
+  );
+
+  return deletedNote;
+}

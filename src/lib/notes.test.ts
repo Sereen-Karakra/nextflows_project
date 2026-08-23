@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { filterNotes, updateNote } from "./notes.js";
+import { filterNotes, updateNote, deleteNote } from "./notes.js";
 
 import type { Note } from "../schemas/note.js";
 
@@ -82,6 +82,13 @@ test("updateNote throws an error when note does not exist", async () => {
       "Testing",
       "This note should not be updated.",
     ),
+    /Note with ID 999 not found/,
+  );
+});
+
+test("deleteNote throws an error when note does not exist", async () => {
+  await assert.rejects(
+    deleteNote(999),
     /Note with ID 999 not found/,
   );
 });
