@@ -1,7 +1,13 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const DATA_DIR = path.resolve(process.cwd(), "data");
+const PROJECT_ROOT = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../..",
+);
+
+const DATA_DIR = path.resolve(PROJECT_ROOT, "data");
 
 export async function readDataFile(fileName: string): Promise<string> {
   const resolvedPath = path.resolve(DATA_DIR, fileName);
@@ -13,3 +19,5 @@ export async function readDataFile(fileName: string): Promise<string> {
 
   return fs.readFile(resolvedPath, "utf-8");
 }
+
+export { DATA_DIR };

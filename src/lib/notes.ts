@@ -1,7 +1,6 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 
-import { readDataFile } from "./file.js";
+import { readDataFile, DATA_DIR } from "./file.js";
 import { notesSchema, type Note } from "../schemas/note.js";
 
 export async function loadNotes(): Promise<Note[]> {
@@ -9,9 +8,7 @@ export async function loadNotes(): Promise<Note[]> {
   return notesSchema.parse(JSON.parse(json));
 }
 
-export async function searchNotes(query: string): Promise<Note[]> {
-  const notes = await loadNotes();
-
+export function filterNotes(notes: Note[], query: string): Note[] {
   const keyword = query.toLowerCase();
 
   return notes.filter(
@@ -20,6 +17,11 @@ export async function searchNotes(query: string): Promise<Note[]> {
       note.category.toLowerCase().includes(keyword) ||
       note.content.toLowerCase().includes(keyword),
   );
+}
+
+export async function searchNotes(query: string): Promise<Note[]> {
+  const notes = await loadNotes();
+  return filterNotes(notes, query);
 }
 
 export async function listNotes(): Promise<
@@ -53,7 +55,7 @@ export async function addNote(
 
   notes.push(newNote);
 
-  const filePath = path.resolve(process.cwd(), "data", "notes.json");
+  const filePath = DATA_DIR + "\\notes.json";
 
   await fs.writeFile(
     filePath,
@@ -62,4 +64,62 @@ export async function addNote(
   );
 
   return newNote;
+}
+
+export async function updateNote(
+  id: number,
+  title: string,
+  category: string,
+  content: string,
+): Promise<Note> {
+  const notes = await loadNotes();
+
+  const noteIndex = notes.findIndex((note) => note.id === id);
+
+  if (noteIndex === -1) {
+    throw new Error(`Note with ID ${id} not found.`);
+  }
+
+  const updatedNote: Note = {
+    id,
+    title,
+    category,
+    content,
+  };
+
+  notes[noteIndex] = updatedNote;
+
+  const filePath = DATA_DIR + "\\notes.json";
+
+  await fs.writeFile(
+    filePath,
+    JSON.stringify(notes, null, 2),
+    "utf-8",
+  );
+
+  return updatedNote;
+}
+
+export async function deleteNote(id: number): Promise<Note> {
+  const notes = await loadNotes();
+
+  const noteIndex = notes.findIndex((note) => note.id === id);
+
+  if (noteIndex === -1) {
+    throw new Error(`Note with ID ${id} not found.`);
+  }
+
+  const deletedNote = notes[noteIndex];
+
+  notes.splice(noteIndex, 1);
+
+  const filePath = DATA_DIR + "\\notes.json";
+
+  await fs.writeFile(
+    filePath,
+    JSON.stringify(notes, null, 2),
+    "utf-8",
+  );
+
+  return deletedNote;
 }
